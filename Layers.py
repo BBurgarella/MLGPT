@@ -24,11 +24,40 @@ class dense:
         self.biaises = np.zeros(output_size)
         self.activation = activation
 
+        # Storage of variables between forward and backward:
+        self.PreviousLayerUnactivated = None
+        self.PreviousInput = None
+
     def forward(self, input):
 
-        Layer_Output =  np.dot(input,self.weights) + self.biaises
+        """
+        input => Batch_size x N_in
+        weights => N_in x N_Out
+        Output = Batch_size x N_Out
+        Layer => dot(input(Batch_size x N_in), weights(N_in x N_Out)) => Batch_size x N_Out
+        
+        """
+
+        # fun fact I leared today, this formulation:
+        # Layer_Output =  np.dot(input,self.weights) + self.biaises
+        # can also be written as:
+        Layer_Output =  (input @ self.weights) + self.biaises
+
+        # Here we need to store the non activated output for traning
+        self.PreviousInput = input
+        self.PreviousLayerUnactivated = Layer_Output
 
         if self.activation is not None:
             Layer_Output = self.activation(Layer_Output)
 
-        return
+        return Layer_Output
+    
+    def backward(self, GradNext, learningRate):
+        
+        """Evaluates the backward propagation for this layer
+
+            I need to understand this better I think
+
+        """
+
+        pass
